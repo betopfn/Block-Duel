@@ -7,7 +7,6 @@ public class ControllableBlock : MonoBehaviour
     public KeyCode rightKey;
     public KeyCode rotateKey;
 
-    private bool isControllable = true;
     private Rigidbody2D rb;
 
     void Start()
@@ -18,7 +17,8 @@ public class ControllableBlock : MonoBehaviour
 
     void Update()
     {
-        if (isControllable)
+        // Verifica se o script está habilitado antes de permitir o controle
+        if (enabled)
         {
             float moveX = 0f;
 
@@ -33,6 +33,11 @@ public class ControllableBlock : MonoBehaviour
             if (Input.GetKeyDown(rotateKey))
                 transform.Rotate(0, 0, 90f);
         }
+        else
+        {
+            // Se o script não estiver habilitado, garante que a velocidade horizontal seja zero
+            rb.velocity = new Vector2(0f, rb.velocity.y);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -40,9 +45,11 @@ public class ControllableBlock : MonoBehaviour
         // Detecta se tocou no chão ou em outro bloco (com tag Block ou Ground)
         if (collision.gameObject.CompareTag("Block") || collision.gameObject.CompareTag("Ground"))
         {
-            isControllable = false;
+            // Desativa este script para impedir mais controle
+            enabled = false;
 
-            // Aqui NÃO congelamos posição ou rotação — queremos que ele possa tombar!
+            // Opcional: Congelar a rotação se você não quiser que tombem mais
+            // rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
     }
 }
