@@ -1,143 +1,97 @@
 using UnityEngine;
 
-
-
 public class BlockSpawner : MonoBehaviour
-
 {
+    public GameObject[] player1Blocks;
+    public GameObject[] player2Blocks;
 
-    public GameObject[] player1Blocks; // Prefabs do jogador 1
+    public float spawnHeight = 12f;
+    public float destroyBelowY = -10f;
 
-    public GameObject[] player2Blocks; // Prefabs do jogador 2
+    private GameObject currentPlayer1Block = null;
+    private GameObject currentPlayer2Block = null;
 
-
-
-    public float spawnInterval = 7f;     // Intervalo entre os spawns
-
-    public float spawnHeight = 12f;      // Altura do spawn
-
-
-
-    private float spawnTimer = 0f;
-
-
+    private bool player1Ready = true;
+    private bool player2Ready = true;
 
     void Update()
-
     {
+        // Checa se blocos caíram fora da tela e libera spawn
+        CheckFallenBlocks();
 
-        spawnTimer += Time.deltaTime;
-
-
-
-        if (spawnTimer >= spawnInterval)
-
+        // Gera bloco do Player 1 apenas se o anterior já parou
+        if (player1Ready)
         {
-
-            SpawnBlocksSimultaneously();
-
-            spawnTimer = 0f;
-
+            currentPlayer1Block = SpawnBlock(player1Blocks, Random.Range(-6f, -1f), 1);
+            player1Ready = false;
         }
 
+        // Gera bloco do Player 2 apenas se o anterior já parou
+        if (player2Ready)
+        {
+            currentPlayer2Block = SpawnBlock(player2Blocks, Random.Range(1f, 6f), 2);
+            player2Ready = false;
+        }
     }
 
-
-
-    void SpawnBlocksSimultaneously()
-
+    GameObject SpawnBlock(GameObject[] blockArray, float xPos, int playerNumber)
     {
+        GameObject prefab = blockArray[Random.Range(0, blockArray.Length)];
+        GameObject instance = Instantiate(prefab, new Vector3(xPos, spawnHeight, 0f), Quaternion.identity);
 
-        // Spawn jogador 1 (lado esquerdo)
+        // Setar tag e playerNumber para controle
+        if (playerNumber == 1)
+            instance.tag = "Player1";
+        else if (playerNumber == 2)
+            instance.tag = "Player2";
 
-        float x1 = Random.Range(-6f, -1f);
-
-        GameObject player1BlockPrefab = player1Blocks[Random.Range(0, player1Blocks.Length)];
-
-        GameObject player1BlockInstance = Instantiate(
-
-          player1BlockPrefab,
-
-          new Vector3(x1, spawnHeight, 0f),
-
-          Quaternion.identity
-
-        );
-
-
-
-        // Ativa o Renderer do bloco do jogador 1
-
-        Renderer renderer1 = player1BlockInstance.GetComponent<Renderer>();
-
-        if (renderer1 != null)
-
+        // Linka o spawner no bloco
+        ControllableBlock controllable = instance.GetComponent<ControllableBlock>();
+        if (controllable != null)
         {
-
-            renderer1.enabled = true;
-
+            controllable.playerNumber = playerNumber;
+            controllable.SetSpawner(this);
+            controllable.enabled = true; // Garantir que o controle está ativo ao nascer
         }
 
+        Renderer renderer = instance.GetComponent<Renderer>();
+        if (renderer != null)
+            renderer.enabled = true;
 
+        Rigidbody2D rb = instance.GetComponent<Rigidbody2D>();
+        if (rb != null)
+            rb.gravityScale = 1f;
 
-        // Garante que a gravidade e o comportamento inicial do Rigidbody2D estejam corretos
-
-        Rigidbody2D rb1 = player1BlockInstance.GetComponent<Rigidbody2D>();
-
-        if (rb1 != null)
-
-        {
-
-            rb1.gravityScale = 1f; // Aplica a gravidade
-
-        }
-
-
-
-        // Spawn jogador 2 (lado direito)
-
-        float x2 = Random.Range(1f, 6f);
-
-        GameObject player2BlockPrefab = player2Blocks[Random.Range(0, player2Blocks.Length)];
-
-        GameObject player2BlockInstance = Instantiate(
-
-          player2BlockPrefab,
-
-          new Vector3(x2, spawnHeight, 0f),
-
-          Quaternion.identity
-
-        );
-
-
-
-        // Ativa o Renderer do bloco do jogador 2
-
-        Renderer renderer2 = player2BlockInstance.GetComponent<Renderer>();
-
-        if (renderer2 != null)
-
-        {
-
-            renderer2.enabled = true;
-
-        }
-
-
-
-        // Garante que a gravidade e o comportamento inicial do Rigidbody2D estejam corretos
-
-        Rigidbody2D rb2 = player2BlockInstance.GetComponent<Rigidbody2D>();
-
-        if (rb2 != null)
-
-        {
-
-            rb2.gravityScale = 1f; // Aplica a gravidade
-
-        }
-
+        return instance;
     }
 
+    void CheckFallenBlocks()
+    {
+        if (currentPlayer1Block != null && currentPlayer1Block.transform.position.y < destroyBelowY)
+        {
+            Destroy(currentPlayer1Block);
+            currentPlayer1Block = null;
+            player1Ready = true;
+        }
+
+        if (currentPlayer2Block != null && currentPlayer2Block.transform.position.y < destroyBelowY)
+        {
+            Destroy(currentPlayer2Block);
+            currentPlayer2Block = null;
+            player2Ready = true;
+        }
+    }
+
+    // Chamado pelo bloco quando para de cair
+    public void NotifyBlockLanded(string tag)
+    {
+        if (tag == "Player1") player1Ready = true;
+        else if (tag == "Player2") player2Ready = true;
+    }
+
+    public void EndGame()
+    {
+        Debug.Log("Jogo encerrado.");
+        // Lógica extra para o fim do jogo (pausar, tela, etc)
+    }
 }

@@ -143,6 +143,7 @@ MonoBehaviour:
   leftKey: 276
   rightKey: 275
   rotateKey: 273
+  playerNumber: 0
 --- !u!1001 &101297523
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -201,6 +202,10 @@ PrefabInstance:
     - target: {fileID: 1360372012648849953, guid: f65fa467789b39c4dba6c80157623905, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1360372012648849955, guid: f65fa467789b39c4dba6c80157623905, type: 3}
+      propertyPath: m_GravityScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1360372012648849958, guid: f65fa467789b39c4dba6c80157623905, type: 3}
       propertyPath: m_Name
@@ -420,6 +425,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fce2beff1dbf76f49bd2340add4c9d4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blockSpawner: {fileID: 0}
 --- !u!61 &116071686
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -612,6 +618,7 @@ MonoBehaviour:
   leftKey: 97
   rightKey: 100
   rotateKey: 119
+  playerNumber: 0
 --- !u!1 &497841484 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1019659792088623349, guid: 7a813cfd739f5ce469268ac6389323bd, type: 3}
@@ -633,6 +640,7 @@ MonoBehaviour:
   leftKey: 276
   rightKey: 275
   rotateKey: 273
+  playerNumber: 0
 --- !u!50 &497841486
 Rigidbody2D:
   serializedVersion: 4
@@ -648,7 +656,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDrag: 1
   m_AngularDrag: 0.05
-  m_GravityScale: 0.3
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 1
   m_SleepingMode: 1
@@ -674,7 +682,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDrag: 1
   m_AngularDrag: 0.05
-  m_GravityScale: 0.3
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 1
   m_SleepingMode: 1
@@ -696,6 +704,7 @@ MonoBehaviour:
   leftKey: 97
   rightKey: 100
   rotateKey: 119
+  playerNumber: 0
 --- !u!1 &580034900 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 282266050770003426, guid: d4da7073a1e56b94dadab9e9d19c2fde, type: 3}
@@ -716,7 +725,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDrag: 1
   m_AngularDrag: 0.05
-  m_GravityScale: 0.3
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 1
   m_SleepingMode: 1
@@ -738,6 +747,7 @@ MonoBehaviour:
   leftKey: 97
   rightKey: 100
   rotateKey: 119
+  playerNumber: 0
 --- !u!1 &702354817
 GameObject:
   m_ObjectHideFlags: 0
@@ -1085,8 +1095,8 @@ MonoBehaviour:
   - {fileID: 1443176895}
   - {fileID: 10576147}
   - {fileID: 497841484}
-  spawnInterval: 2
   spawnHeight: 10
+  destroyBelowY: -10
 --- !u!4 &1128817020
 Transform:
   m_ObjectHideFlags: 0
@@ -1123,6 +1133,7 @@ MonoBehaviour:
   leftKey: 276
   rightKey: 273
   rotateKey: 274
+  playerNumber: 0
 --- !u!1 &1443176895 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 282266050770003426, guid: d4da7073a1e56b94dadab9e9d19c2fde, type: 3}
@@ -1144,6 +1155,7 @@ MonoBehaviour:
   leftKey: 276
   rightKey: 275
   rotateKey: 273
+  playerNumber: 0
 --- !u!50 &1443176897
 Rigidbody2D:
   serializedVersion: 4
@@ -1159,7 +1171,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDrag: 1
   m_AngularDrag: 0.05
-  m_GravityScale: 0.3
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 1
   m_SleepingMode: 1
@@ -1301,6 +1313,10 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 346766894715072764, guid: 27bf3bc59dc92d6429b5884de9de33c7, type: 3}
+      propertyPath: m_GravityScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 346766894715072766, guid: 27bf3bc59dc92d6429b5884de9de33c7, type: 3}
       propertyPath: m_Name
       value: l_brick (1)
@@ -1336,6 +1352,7 @@ MonoBehaviour:
   leftKey: 97
   rightKey: 100
   rotateKey: 119
+  playerNumber: 0
 --- !u!1 &1938755074 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2326261601757592076, guid: 9c749347ff97f1343a9b5a4b9bcc34ac, type: 3}
@@ -1357,6 +1374,7 @@ MonoBehaviour:
   leftKey: 97
   rightKey: 100
   rotateKey: 119
+  playerNumber: 0
 --- !u!1 &1975105021
 GameObject:
   m_ObjectHideFlags: 0
@@ -1558,6 +1576,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2326261601757592074, guid: 9c749347ff97f1343a9b5a4b9bcc34ac, type: 3}
+      propertyPath: m_GravityScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2326261601757592076, guid: 9c749347ff97f1343a9b5a4b9bcc34ac, type: 3}
       propertyPath: m_Name
       value: squat_brick (1)
@@ -1572,7 +1594,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2326261601757592070, guid: 9c749347ff97f1343a9b5a4b9bcc34ac, type: 3}
-    - {fileID: 2326261601757592077, guid: 9c749347ff97f1343a9b5a4b9bcc34ac, type: 3}
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 9c749347ff97f1343a9b5a4b9bcc34ac, type: 3}
 --- !u!1 &2121329726
 GameObject:
@@ -1701,6 +1723,7 @@ MonoBehaviour:
   leftKey: 276
   rightKey: 275
   rotateKey: 273
+  playerNumber: 0
 --- !u!1001 &282266051350021302
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1835,6 +1858,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 346766894715072761, guid: 27bf3bc59dc92d6429b5884de9de33c7, type: 3}
       propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 346766894715072764, guid: 27bf3bc59dc92d6429b5884de9de33c7, type: 3}
+      propertyPath: m_GravityScale
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 346766894715072766, guid: 27bf3bc59dc92d6429b5884de9de33c7, type: 3}
@@ -1987,6 +2014,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1360372012648849955, guid: f65fa467789b39c4dba6c80157623905, type: 3}
+      propertyPath: m_GravityScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1360372012648849958, guid: f65fa467789b39c4dba6c80157623905, type: 3}
       propertyPath: m_Name
       value: pilar_brick
@@ -2060,6 +2091,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2326261601757592074, guid: 9c749347ff97f1343a9b5a4b9bcc34ac, type: 3}
+      propertyPath: m_GravityScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2326261601757592076, guid: 9c749347ff97f1343a9b5a4b9bcc34ac, type: 3}
       propertyPath: m_Name
       value: squat_brick
@@ -2072,7 +2107,5 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Block
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2326261601757592070, guid: 9c749347ff97f1343a9b5a4b9bcc34ac, type: 3}
-    - {fileID: 2326261601757592077, guid: 9c749347ff97f1343a9b5a4b9bcc34ac, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c749347ff97f1343a9b5a4b9bcc34ac, type: 3}

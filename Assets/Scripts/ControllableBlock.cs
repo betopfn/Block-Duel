@@ -1,3 +1,4 @@
+// ControllableBlock.cs
 using UnityEngine;
 
 public class ControllableBlock : MonoBehaviour
@@ -7,49 +8,74 @@ public class ControllableBlock : MonoBehaviour
     public KeyCode rightKey;
     public KeyCode rotateKey;
 
+    [HideInInspector]
+    public int playerNumber;
+
     private Rigidbody2D rb;
+    private BlockSpawner spawner;
+    private bool hasStopped = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 1f;
+        rb.constraints = RigidbodyConstraints2D.None;
+
+        // Define a tag baseada no playerNumber
+        if (playerNumber == 1)
+            gameObject.tag = "Player1";
+        else if (playerNumber == 2)
+            gameObject.tag = "Player2";
+
+        hasStopped = false;
+        enabled = true; // Garantir que o controle está ativo
     }
 
     void Update()
     {
-        // Verifica se o script está habilitado antes de permitir o controle
-        if (enabled)
+        if (hasStopped || !enabled)
         {
-            float moveX = 0f;
-
-            if (Input.GetKey(leftKey))
-                moveX = -1f;
-            else if (Input.GetKey(rightKey))
-                moveX = 1f;
-
-            // Aplica força horizontal proporcional
-            rb.velocity = new Vector2(moveX * moveSpeed, rb.velocity.y);
-
-            if (Input.GetKeyDown(rotateKey))
-                transform.Rotate(0, 0, 90f);
-        }
-        else
-        {
-            // Se o script não estiver habilitado, garante que a velocidade horizontal seja zero
+            // Para movimento horizontal após cair
             rb.velocity = new Vector2(0f, rb.velocity.y);
+            return;
         }
+
+        float moveX = 0f;
+        if (Input.GetKey(leftKey))
+            moveX = -1f;
+        else if (Input.GetKey(rightKey))
+            moveX = 1f;
+
+        rb.velocity = new Vector2(moveX * moveSpeed, rb.velocity.y);
+
+        if (Input.GetKeyDown(rotateKey))
+            transform.Rotate(0, 0, 90f);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Detecta se tocou no chão ou em outro bloco (com tag Block ou Ground)
-        if (collision.gameObject.CompareTag("Block") || collision.gameObject.CompareTag("Ground"))
+        if ((collision.gameObject.CompareTag("Player1") || collision.gameObject.CompareTag("Player2") || collision.gameObject.CompareTag("Ground")) && !hasStopped)
         {
-            // Desativa este script para impedir mais controle
-            enabled = false;
+            hasStopped = true;
+            enabled = false; // Bloqueia controle
 
-            // Opcional: Congelar a rotação se você não quiser que tombem mais
-            // rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+            // Notifica spawner que o bloco parou de cair
+            if (spawner != null)
+            {
+                spawner.NotifyBlockLanded(gameObject.tag);
+            }
+            else
+            {
+                // Busca o spawner se não setado
+                BlockSpawner foundSpawner = FindObjectOfType<BlockSpawner>();
+                if (foundSpawner != null)
+                    foundSpawner.NotifyBlockLanded(gameObject.tag);
+            }
         }
+    }
+
+    public void SetSpawner(BlockSpawner spawner)
+    {
+        this.spawner = spawner;
     }
 }
